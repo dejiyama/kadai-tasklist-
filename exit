@@ -1,0 +1,76 @@
+[1mdiff --git a/app/controllers/tasks_controller.rb b/app/controllers/tasks_controller.rb[m
+[1mindex 9c8768a..b331e8c 100644[m
+[1m--- a/app/controllers/tasks_controller.rb[m
+[1m+++ b/app/controllers/tasks_controller.rb[m
+[36m@@ -14,11 +14,12 @@[m [mclass TasksController < ApplicationController[m
+   def create[m
+     @task = Task.new(task_params)[m
+     [m
+[31m-    if @task.save[m
+[32m+[m[32m    if@task.save[m
+       flash[:success] = 'Taskが正常に投稿されました。'[m
+       redirect_to @task[m
+     else[m
+       flash.now[:danger] = 'Taskが投稿されませんでした。'[m
+[32m+[m[32m      render :new[m
+     end[m
+   end[m
+ [m
+[1mdiff --git a/app/models/task.rb b/app/models/task.rb[m
+[1mindex b020cd0..a468dc8 100644[m
+[1m--- a/app/models/task.rb[m
+[1m+++ b/app/models/task.rb[m
+[36m@@ -1,5 +1,5 @@[m
+ class Task < ApplicationRecord[m
+[31m-  validates :content, presence: ture, length: {maximum:255}[m
+[32m+[m[32m  validates :content, presence: true, length: {maximum:255}[m
+   validates :title, presence: true, length:{maximum:255}[m
+[31m-  validates :status, presence: true, length:{mixmum:10}[m
+[32m+[m[32m  validates :status, presence: true, length:{maximum:10}[m
+ end[m
+[1mdiff --git a/app/views/tasks/index.html.erb b/app/views/tasks/index.html.erb[m
+[1mindex 5d2505a..3f0077a 100644[m
+[1m--- a/app/views/tasks/index.html.erb[m
+[1m+++ b/app/views/tasks/index.html.erb[m
+[36m@@ -2,8 +2,7 @@[m
+ <ul>[m
+   <% @tasks.each do |task| %>[m
+   <li><%= link_to task.id,task %> : [m
+[31m-  <%= task.title>[m
+[31m-  &gt;[m
+[32m+[m[32m  <%= task.title %>[m
+   <%= task.content %>[m
+   &gt;[m
+   <%= task.status %>[m
+[1mdiff --git a/app/views/tasks/show.html.erb b/app/views/tasks/show.html.erb[m
+[1mindex d98eaa2..2d47e52 100644[m
+[1m--- a/app/views/tasks/show.html.erb[m
+[1m+++ b/app/views/tasks/show.html.erb[m
+[36m@@ -3,7 +3,6 @@[m
+ <p>タイトル:[m
+   <%= @task.title %>[m
+ </p>[m
+[31m-[m
+ <p>メッセージ:[m
+   <%= @task.content %></p>[m
+   <p>ステータス[m
+[1mdiff --git a/db/schema.rb b/db/schema.rb[m
+[1mindex a92f45a..c58d5de 100644[m
+[1m--- a/db/schema.rb[m
+[1m+++ b/db/schema.rb[m
+[36m@@ -10,13 +10,14 @@[m
+ #[m
+ # It's strongly recommended that you check this file into your version control system.[m
+ [m
+[31m-ActiveRecord::Schema.define(version: 20171029005601) do[m
+[32m+[m[32mActiveRecord::Schema.define(version: 20171029023759) do[m
+ [m
+   create_table "tasks", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|[m
+     t.string   "content"[m
+     t.datetime "created_at", null: false[m
+     t.datetime "updated_at", null: false[m
+     t.string   "status"[m
+[32m+[m[32m    t.string   "title"[m
+   end[m
+ [m
+ end[m
